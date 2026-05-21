@@ -3,14 +3,20 @@ import 'package:nova_app/attendance_module/attendance_page.dart';
 import 'package:nova_app/attendance_module/information.dart';
 import 'package:nova_app/attendance_module/subjects.dart';
 import 'package:nova_app/attendance_module/subject_stat.dart';
-import 'package:nova_app/landing_page.dart';
+import 'package:nova_app/landing_module/splash_screen.dart';
+import 'package:nova_app/landing_module/home_page.dart';
+import 'package:nova_app/landing_module/landing_page.dart';
+import 'package:nova_app/landing_module/login_page.dart';
 import 'package:nova_app/tasks_module/screens/add_task_screen.dart';
 import 'package:nova_app/tasks_module/screens/task_detail_screen.dart';
 import 'package:nova_app/tasks_module/screens/task_screen.dart';
 import 'package:nova_app/tasks_module/models/task.dart';
 
 class Routes {
-  static const landing = '/';
+  static const splash = '/splash';
+  static const landing = '/landing';
+  static const home = '/';
+  static const login = '/login';
   static const tasks = '/tasks';
   static const addTask = '/tasks/add';
   static const taskDetail = '/tasks/detail';
@@ -26,8 +32,14 @@ class RouteGenerator {
     final args = settings.arguments;
 
     switch (settings.name) {
+      case Routes.splash:
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
       case Routes.landing:
         return MaterialPageRoute(builder: (_) => const LandingPage());
+      case Routes.home:
+        return MaterialPageRoute(builder: (_) => const HomePage());
+      case Routes.login:
+        return MaterialPageRoute(builder: (_) => const LoginPage());
       case Routes.tasks:
         return MaterialPageRoute(builder: (_) => const TaskScreen());
       case Routes.addTask:
