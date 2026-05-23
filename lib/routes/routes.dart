@@ -7,6 +7,7 @@ import 'package:nova_app/landing_module/splash_screen.dart';
 import 'package:nova_app/landing_module/home_page.dart';
 import 'package:nova_app/landing_module/landing_page.dart';
 import 'package:nova_app/landing_module/login_page.dart';
+import 'package:nova_app/landing_module/signup_page.dart';
 import 'package:nova_app/tasks_module/screens/add_task_screen.dart';
 import 'package:nova_app/tasks_module/screens/task_detail_screen.dart';
 import 'package:nova_app/tasks_module/screens/task_screen.dart';
@@ -17,6 +18,7 @@ class Routes {
   static const landing = '/landing';
   static const home = '/';
   static const login = '/login';
+  static const signup = '/signup';
   static const tasks = '/tasks';
   static const addTask = '/tasks/add';
   static const taskDetail = '/tasks/detail';
@@ -40,6 +42,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const HomePage());
       case Routes.login:
         return MaterialPageRoute(builder: (_) => const LoginPage());
+      case Routes.signup:
+        return MaterialPageRoute(builder: (_) => const SignupPage());
       case Routes.tasks:
         return MaterialPageRoute(builder: (_) => const TaskScreen());
       case Routes.addTask:

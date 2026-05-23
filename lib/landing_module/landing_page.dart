@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nova_app/routes/routes.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -37,16 +38,18 @@ class _LandingPageState extends State<LandingPage> {
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                     child: ElevatedButton(
                       onPressed: (){
-                        Navigator.pushNamed(context, "/login");
+                        Navigator.of(context).pushNamed(Routes.signup);
                       },
-                      child: Text("Get Started"),
+                      child: Text("Sign up"),
                     )
                 ),
                 Container(
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                     child: ElevatedButton(
-                      onPressed: (){},
-                      child: Text("Login with google"),
+                      onPressed: (){
+                        Navigator.of(context).pushNamed(Routes.login);
+                      },
+                      child: Text("Login"),
                     )
                 ),
               ],
