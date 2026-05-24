@@ -1,16 +1,16 @@
 # nova_app
+Authentication is perfect.App remembers after refresh ..so refresh token is working
 
-A new Flutter project.
+Issues Found:
+splash_screen.dart
+Directionality Widget in Splash Screen(GOOD UI XD)
+The timer which you defined is working but theres an issue with the route so i just the manual naming convention
 
-## Getting Started
+login_screen.dart and signup_page.dart
+Always check for the response. The web browser returned empty json as response
+And before dereferencing the access and refresh token first check if its a map.
+Every phone may behave differently so safe to check
 
-This project is a starting point for a Flutter application.
+These are the issues i found so far ..Just take a look at the first Issue .I googled it but dint understand much
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
