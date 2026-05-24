@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 // Make sure to update this import path based on your project structure
 import 'package:nova_app/attendance_module/attendance_page.dart'; 
+import 'package:nova_app/routes/routes.dart';
 
 class InformationPage extends StatefulWidget {
   final String subjectsJson;
@@ -84,13 +85,7 @@ class _InformationPageState extends State<InformationPage> {
     );
 
     // Navigates to AttendancePage and flushes onboarding screens out of the backstack
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AttendancePage(timetableJson: finalTimetableJson),
-      ),
-      (route) => false,
-    );
+    Navigator.pushNamedAndRemoveUntil(context, Routes.attendancePage, (route) => false, arguments: finalTimetableJson);
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:nova_app/attendance_module/information.dart';
+import 'package:nova_app/routes/routes.dart';
 
 class SubjectsPage extends StatefulWidget {
   const SubjectsPage({super.key});
@@ -42,12 +43,7 @@ class _SubjectsPageState extends State<SubjectsPage> {
     String jsonSubjects = jsonEncode({'subjects': subjects});
 
     // 2. Navigate immediately and pass the freshly generated JSON string directly
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => InformationPage(subjectsJson: jsonSubjects),
-      ),
-    );
+    Navigator.pushNamed(context, Routes.information, arguments: jsonSubjects);
   }
 
   @override

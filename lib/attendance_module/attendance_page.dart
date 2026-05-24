@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:nova_app/attendance_module/subject_stat.dart';
+import 'package:nova_app/routes/routes.dart';
 
 class AttendancePage extends StatefulWidget {
   final String timetableJson;
@@ -183,16 +184,11 @@ class _AttendancePageState extends State<AttendancePage> {
                         child: InkWell(
                           onTap: () {
                             final stats = _subjectStats[subject] ?? [0, 0];
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SubjectStatistics(
-                                  subjectName: subject,
-                                  presentClasses: stats[0],
-                                  totalClasses: stats[1],
-                                ),
-                              ),
-                            );
+                            Navigator.pushNamed(context, Routes.subjectStat, arguments: {
+                              'subjectName': subject,
+                              'presentClasses': stats[0],
+                              'totalClasses': stats[1],
+                            });
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
