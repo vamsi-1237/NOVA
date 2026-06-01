@@ -3,15 +3,24 @@ import 'package:nova_app/attendance_module/attendance_page.dart';
 import 'package:nova_app/attendance_module/information.dart';
 import 'package:nova_app/attendance_module/subjects.dart';
 import 'package:nova_app/attendance_module/subject_stat.dart';
-import 'package:nova_app/landing_module/splash_screen.dart';
-import 'package:nova_app/landing_module/home_page.dart';
-import 'package:nova_app/landing_module/landing_page.dart';
-import 'package:nova_app/landing_module/login_page.dart';
-import 'package:nova_app/landing_module/signup_page.dart';
 import 'package:nova_app/tasks_module/screens/add_task_screen.dart';
 import 'package:nova_app/tasks_module/screens/task_detail_screen.dart';
 import 'package:nova_app/tasks_module/screens/task_screen.dart';
 import 'package:nova_app/tasks_module/models/task.dart';
+import 'package:nova_app/events_module/add_event.dart';
+import 'package:nova_app/events_module/event_details.dart';
+import 'package:nova_app/events_module/events_page.dart';
+import 'package:nova_app/landing_module/landing_page.dart';
+import 'package:nova_app/landing_module/splash_screen.dart';
+import 'package:nova_app/landing_module/login_page.dart';
+import 'package:nova_app/landing_module/signup_page.dart';
+import 'package:nova_app/landing_module/home_page.dart';
+import 'package:nova_app/events_module/event_model.dart';
+import 'package:nova_app/scheduler/scheduler_test_page.dart';
+import 'package:nova_app/scheduler/schedule_results_page.dart';
+
+
+
 
 class Routes {
   static const splash = '/splash';
@@ -22,6 +31,11 @@ class Routes {
   static const tasks = '/tasks';
   static const addTask = '/tasks/add';
   static const taskDetail = '/tasks/detail';
+  static const events = '/events';
+  static const addEvent = '/events/add';
+  static const eventDetail = '/events/detail';
+  static const schedulerTest = '/scheduler/test';
+  static const scheduleResults = '/scheduler/results';
 
   static const attendance = '/attendance'; // subjects / onboarding
   static const information = '/attendance/information'; // takes subjectsJson (String)
@@ -53,6 +67,25 @@ class RouteGenerator {
           return MaterialPageRoute(builder: (_) => TaskDetailScreen(task: args));
         }
         return _errorRoute('Invalid arguments for TaskDetail');
+      case Routes.events:
+        return MaterialPageRoute(builder: (_) => const EventsPage());
+      case Routes.addEvent:
+        if (args is Event) {
+          return MaterialPageRoute(builder: (_) => AddEventScreen(event: args));
+        }
+        return MaterialPageRoute(builder: (_) => const AddEventScreen());
+      case Routes.eventDetail:
+        if (args is Event) {
+          return MaterialPageRoute(builder: (_) => EventDetailsScreen(event: args));
+        }
+        return _errorRoute('Invalid arguments for EventDetails');
+      case Routes.schedulerTest:
+        return MaterialPageRoute(builder: (_) => const SchedulerTestPage());
+      case Routes.scheduleResults:
+        if (args is Map<String, dynamic>) {
+          return MaterialPageRoute(builder: (_) => ScheduleResultsPage(results: args));
+        }
+        return _errorRoute('Invalid arguments for ScheduleResults');
       case Routes.attendance:
         return MaterialPageRoute(builder: (_) => const SubjectsPage());
       case Routes.information:

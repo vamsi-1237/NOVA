@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 import 'auth_storage.dart';
 
 class ApiCaller {
-  static const String baseUrl = "http://localhost:3000";
+  // Keep `baseUrl` without a trailing slash — endpoints may include a leading slash.
+  static const String baseUrl = "http://localhost:8000";
 
   //PRIVATE
 
@@ -27,7 +28,7 @@ class ApiCaller {
     final response = await http.post(
       uri,
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'refreshToken': refreshToken}),
+      body: jsonEncode({'token': refreshToken}),
     );
 
     if (response.statusCode == 200) {
@@ -89,9 +90,8 @@ class ApiCaller {
       }) async {
     final uri = Uri.parse("$baseUrl$endpoint");
 
-    return _request(
-          (headers) => http.post(uri, headers: headers, body: jsonEncode(body)),
-    );
+    // Use HTTP PUT for update operations (was incorrectly using POST).
+    return _request((headers) => http.put(uri, headers: headers, body: jsonEncode(body)));
   }
 
   static Future<String> delete(String endpoint) async {

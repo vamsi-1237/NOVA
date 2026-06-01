@@ -46,13 +46,22 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     final repo = TaskRepository.instance;
     final t = Task(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
-      name: _nameCtrl.text.trim(),
+      title: _nameCtrl.text.trim(),
+      category: _category,
       description: _descCtrl.text.trim(),
       deadline: _deadline!,
-      estimatedDuration: _duration,
-      priority: _priority,
-      category: _category,
+      durationMins: _duration.inMinutes,
+      userPriority: _priority == 'Low'
+          ? 1
+          : _priority == 'Medium'
+              ? 3
+              : _priority == 'High'
+                  ? 4
+                  : 5,
+      moodTag: _category == 'Academic' ? 'Focus' : 'Routine',
+      location: '',
       status: 'Pending',
+      tags: [_category],
     );
     repo.add(t);
     Navigator.of(context).pop();

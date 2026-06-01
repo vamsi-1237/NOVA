@@ -89,14 +89,24 @@ class _SignupPageState extends State<SignupPage> {
                                     },
                                   );
 
-                                  final data = jsonDecode(jsonResp);
+                                  // Some backends return an empty body on success, so only
+                                  // decode JSON when there is actually content.
+                                  if (jsonResp.trim().isNotEmpty) {
+                                    final data = jsonDecode(jsonResp);
 
-                                  if (data["error"] != null) {
-                                    throw Exception(data["error"]);
+                                    if (data is Map && data["error"] != null) {
+                                      throw Exception(data["error"]);
+                                    }
                                   }
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Signup successful — please login')),
+                                  );
 
                                   Navigator.of(context).pushNamed(Routes.login);
                                 } catch (e) {
+                                  final msg = e.toString();
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Signup failed: $msg')));
                                   print("Signup failed: $e");
                                 }
                               }

@@ -1,0 +1,64 @@
+Scheduling formulas extracted from lib/models/schedulable_item.dart and lib/scheduler/scheduler_test_page.dart
+
+1) priorityWeight
+priorityWeight = clamp(userPriority,1,5) / 5.0
+
+2) deadlinePressure
+Let minutesUntilDeadline = deadline.difference(DateTime.now()).inMinutes
+Let boundedMinutes = clamp(minutesUntilDeadline, 0, 60*24*30)
+deadlinePressure = 1.0 / (1.0 + (boundedMinutes / 1440.0))
+
+3) durationWeight
+durationWeight = clamp(durationMins / 240.0, 0.0, 1.0)
+
+4) activityTypeWeight
+Learning -> 1.0
+Practice -> 0.85
+Routine -> 0.7
+
+5) urgencyCoefficient
+fixedBonus = isFixed ? 1.08 : 1.0
+recurringBonus = isRecurring ? 0.96 : 1.0
+locationBonus = location empty ? 0.98 : 1.0
+bufferPenalty = bufferAfterMins <= 0 ? 1.0 : (1.0 - clamp(bufferAfterMins / (durationMins + bufferAfterMins), 0.0, 0.35))
+base = (impactScore * 0.4) + (priorityWeight * 0.25) + (deadlinePressure * 0.25) + (activityTypeWeight * 0.1)
+urgencyCoefficient = clamp(base * fixedBonus * recurringBonus * locationBonus * bufferPenalty, 0.0, 1.0)
+
+6) scheduleScore
+locationPart = location empty ? 0.0 : 3.0
+scheduleScore = (40.0 * deadlinePressure) + (30.0 * priorityWeight) + (10.0 * (1.0 - durationWeight)) + (15.0 * urgencyCoefficient) + locationPart + (2.0 * activityTypeWeight)
+
+7) _deriveImpactScore(...) (impactScore computation)
+priorityComponent = clamp(userPriority,1,5) / 5.0
+durationComponent = clamp(durationMins / 240.0, 0.0, 1.0)
+bufferComponent = 1.0 - clamp(bufferAfterMins / (durationMins + bufferAfterMins), 0.0, 0.5)
+fixedComponent = isFixed ? 0.12 : 0.0
+recurringComponent = isRecurring ? 0.05 : 0.0
+energyComponent = clamp(energyRequired,1,5) / 25.0
+impactScore = (0.45 * priorityComponent) + (0.15 * durationComponent) + (0.15 * bufferComponent) + fixedComponent + recurringComponent + energyComponent
+
+8) locationWeight
+locationWeight = location empty ? 0 : 1
+
+9) deadlineScoreFor(i) [from scheduler_test_page.dart]
+dDate = DateTime(i.deadline.year, i.deadline.month, i.deadline.day)
+daysUntil = dDate.difference(DateTime(today.year, today.month, today.day)).inDays
+days = max(0, daysUntil)
+urgency = 1.0 / (1.0 + days)
+energyFactor = clamp(i.energyRequired,1,5) / 5.0
+deadlineScore = urgency * energyFactor
+
+10) combinedPriority(i) [from scheduler_test_page.dart]
+combinedPriority = (0.6 * deadlineScoreFor(i)) + (0.4 * clamp(impactScore, 0.0, 1.0))
+
+11) Scheduling constraints and arithmetic (behavioral rules)
+- Daily capacity: require usedMins + item.durationMins <= dailyLimit (e.g. 300 minutes)
+- High-energy limit: count items with energyRequired >= highEnergyThreshold and ensure count < maxHighEnergyPerDay
+- Time placement offset: offset += item.durationMins + item.bufferAfterMins
+- Start time calculation: start = DateTime(day.year, day.month, day.day, workWindowStartHour).add(Duration(minutes: offset))
+
+Notes:
+- clamp(x,a,b) denotes bounding x to [a,b].
+- All weights and coefficients in code are floating-point and then used in linear combinations to compute scores used for sorting and scheduling decisions.
+
+End of file.

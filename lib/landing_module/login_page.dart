@@ -90,21 +90,31 @@ class _LoginPageState extends State<LoginPage> {
                                     },
                                   );
 
-                                  final data = jsonDecode(jsonResp);
-                                  final accessToken = data["access_token"];
-                                  final refreshToken = data["refresh_token"];
+                                  // Some backends return an empty body on success, so only
+                                  // decode JSON when there is actually content.
+                                  if (jsonResp.trim().isNotEmpty) {
+                                    final data = jsonDecode(jsonResp);
 
-                                  if (data["error"] != null) {
-                                    throw Exception(data["error"]);
+                                    if (data is Map && data["error"] != null) {
+                                      throw Exception(data["error"]);
+                                    }
+
+                                    if (data is Map && data["access_token"] != null && data["refresh_token"] != null) {
+                                      await AuthStorage.saveTokens(
+                                        accessToken: data["access_token"],
+                                        refreshToken: data["refresh_token"],
+                                      );
+                                    }
                                   }
 
-                                  await AuthStorage.saveTokens(
-                                    accessToken: accessToken, refreshToken: refreshToken,
-                                  );
-
-                                  Navigator.of(context).pushNamed(Routes.attendance);
+                                  Navigator.of(context).pushNamed(Routes.home);
                                 } catch (e) {
-                                  print("Login failed: $e");
+                                    // Show friendly error feedback instead of only printing.
+                                    final msg = e.toString();
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Login failed: $msg')),
+                                    );
+                                    print("Login failed: $e");
                                 }
                               }
                             },
