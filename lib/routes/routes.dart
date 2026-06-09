@@ -11,6 +11,7 @@ import 'package:nova_app/events_module/add_event.dart';
 import 'package:nova_app/events_module/event_details.dart';
 import 'package:nova_app/events_module/events_page.dart';
 import 'package:nova_app/landing_module/landing_page.dart';
+import 'package:nova_app/landing_module/google_callback_page.dart';
 import 'package:nova_app/landing_module/splash_screen.dart';
 import 'package:nova_app/landing_module/login_page.dart';
 import 'package:nova_app/landing_module/signup_page.dart';
@@ -28,6 +29,7 @@ class Routes {
   static const home = '/';
   static const login = '/login';
   static const signup = '/signup';
+  static const oauthGoogleCallback = '/oauth/google/callback';
   static const tasks = '/tasks';
   static const addTask = '/tasks/add';
   static const taskDetail = '/tasks/detail';
@@ -58,6 +60,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const LoginPage());
       case Routes.signup:
         return MaterialPageRoute(builder: (_) => const SignupPage());
+      case Routes.oauthGoogleCallback:
+        return MaterialPageRoute(builder: (_) => const GoogleCallbackPage());
       case Routes.tasks:
         return MaterialPageRoute(builder: (_) => const TaskScreen());
       case Routes.addTask:
